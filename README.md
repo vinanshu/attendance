@@ -11,3 +11,4 @@
 - Jumar Sinaya
 - Kimjie Rubin Anoc
 - Shaquille Cablinda
+"# attendance" 
