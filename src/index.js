@@ -1,34 +1,17 @@
-// index.js
-import React from "react";
-import ReactDOM from "react-dom/client";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Register from "./components/register";
-import Login from "./components/login";
-import Home from "./components/Home";
-import Admins from "./components/Admins";
-import Mobile from "./components/mobile";
-import RegDetails from "./components/regdetails";
-import TimestampPage from './components/TimestampPage'; // Import TimestampPage
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import './styles/index.css'
+import App from './App'
+import reportWebVitals from './config/reportWebVitals'
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
+const root = ReactDOM.createRoot(document.getElementById('root'))
 root.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <Routes>
-        {/* User Routes */}
-        <Route path="/" element={<Register />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/register" element={<Register />} />
+    <App />
+  </React.StrictMode>,
+)
 
-        {/* Admin Routes */}
-        <Route path="/admins" element={<Admins />} />
-        <Route path="/mobile" element={<Mobile />} />
-        <Route path="/regdetails" element={<RegDetails />} />
-        <Route path="/timestampPage" element={<TimestampPage />} /> {/* Add TimestampPage */}
-
-        <Route path="*" element={<div>Page Not Found</div>} />
-      </Routes>
-    </BrowserRouter>
-  </React.StrictMode>
-);
+// If you want to start measuring performance in your app, pass a function
+// to log results (for example: reportWebVitals(console.log))
+// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+reportWebVitals()

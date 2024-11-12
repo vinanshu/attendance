@@ -1,77 +1,68 @@
-// Login.js
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { signInWithEmailAndPassword } from "firebase/auth";
+import React, { useState } from "react";
+import { auth } from "../config/firebase";
+import { toast } from "react-toastify";
+import SignInwithGoogle from "./signInWIthGoogle";
 
-const Login = () => {
-  const [loginData, setLoginData] = useState({ idNumber: '', password: '' });
-  const [error, setError] = useState('');
-  const navigate = useNavigate();
+function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setLoginData({ ...loginData, [name]: value });
-  };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      console.log("User logged in Successfully");
+      window.location.href = "/profile";
+      toast.success("User logged in Successfully", {
+        position: "top-center",
+      });
+    } catch (error) {
+      console.log(error.message);
 
-    // Validate that both fields are filled
-    if (!loginData.idNumber || !loginData.password) {
-      setError('Please fill in all fields.');
-      return;
+      toast.error(error.message, {
+        position: "bottom-center",
+      });
     }
-
-    // Get users from localStorage
-    const users = JSON.parse(localStorage.getItem('users')) || [];
-    const user = users.find(
-      (user) =>
-        user.idNumber === loginData.idNumber && user.password === loginData.password
-    );
-
-    if (user) {
-      localStorage.setItem('loggedInIdNumber', user.idNumber); // Save logged-in user ID
-      navigate('components/home');
-    } else {
-      setError('Invalid credentials.');
-    }
-  };
-
-  const handleRegisterRedirect = () => {
-    navigate('components/register');
   };
 
   return (
-    <div>
-      <h2>Login</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="idNumber">ID Number:</label>
-          <input
-            type="text"
-            id="idNumber"
-            name="idNumber"
-            value={loginData.idNumber}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="password">Password:</label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            value={loginData.password}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        {error && <p style={{ color: 'red' }}>{error}</p>}
-        <button type="submit">Login</button>
-      </form>
-      <button onClick={handleRegisterRedirect}>Go to Register</button>
-    </div>
+    <form onSubmit={handleSubmit}>
+      <h3>Login</h3>
+
+      <div className="mb-3">
+        <label>Email address</label>
+        <input
+          type="email"
+          className="form-control"
+          placeholder="Enter email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+      </div>
+
+      <div className="mb-3">
+        <label>Password</label>
+        <input
+          type="password"
+          className="form-control"
+          placeholder="Enter password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+      </div>
+
+      <div className="d-grid">
+        <button type="submit" className="btn btn-primary">
+          Submit
+        </button>
+      </div>
+      <p className="forgot-password text-right">
+        New user <a href="/register">Register Here</a>
+      </p>
+      <SignInwithGoogle/>
+    </form>
   );
-};
+}
 
 export default Login;
